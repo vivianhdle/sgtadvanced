@@ -24,7 +24,7 @@ server.use(express.urlencoded({extended:false}));//have express pull body data t
 server.get('/api/grades', (req,res)=>{//could be req and res
     db.connect(()=>{
         const query = 'SELECT `id`, CONCAT(`givenname`," ",`surname`) AS `name`, `course`,`grade` FROM grades';
-        db.query(query,(error,data,)=>{
+        db.query(query,(error,data)=>{
             const output ={
                 success:false
             }
@@ -40,9 +40,38 @@ server.get('/api/grades', (req,res)=>{//could be req and res
     
 })//called an endpoint
 
-
+//INSERT INTO `grades` SET `givenname`="Dan",`surname`="Paschal",`course`="math",`grade`=80,`added`=NOW() Can only insert one at a time
+//INSERT INTO `grades` {`surname`,`givenname`,`course`,`grade`} VALUES ("Paschal","Dan","math",80) The pro to this is you can insert many
 server.post('/api/grades',(request,response)=>{
-    db.c
+    //check the body object and see if any data was not sent
+    if(request.body.name === undefined || request.body.course === undefined || request.body.grade ===undefined){
+        response.send({
+            //respond to the client with an appropriate error message
+            success:false,
+            error:'invalid name, course, or grade'
+        })
+        //exit out of the function
+        return;
+    }
+    //connect to database
+    db.connect(()=>{
+        const name = request.body.name.split(' ');
+        const query = 'INSERT INTO `grades` SET `givenname`="'+name[0]+ '",`surname`="'+name.splice(1).join(' ')+'",`course`="'+request.body.course+'",`grade`='+request.body.grade+',`added`=NOW()'
+        console.log(query)
+        db.query(query, (error,results) => {
+            if (!error){
+                response.send({
+                    success:true,
+                    new_id:results.insertId
+                })
+            } else {
+                response.send({
+                    success:false,
+                    error
+                })
+            }
+        }
+    )})
 })
 
 
