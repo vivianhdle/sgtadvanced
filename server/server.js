@@ -3,18 +3,19 @@
 const express = require('express'); //load the express library into the file
 const mysql = require('mysql');//load mysql library
 const mysqlcredentials = require('./mysqlcreds.js');
+const cors  = require('cors')
 //using the credentials that we loaded, establish a preliminary connection to the database
 const db = mysql.createConnection(mysqlcredentials);//hey mysql library, make a connection to the database, use these credentials to make that connection
 
 const server = express();
 
-
+server.use(cors());
 server.use( express.static(__dirname +'/html') );//serving index.html, takes in a path
 //__dirname is your current working directory
 //only works on static files
 
 server.use(express.urlencoded({extended:false}));//have express pull body data that is url encoded and place it into an object called body
-
+server.use(express.json()) //used for things like axioss
 
 //takes in two parameters, 
 //the path to listen for,
@@ -74,7 +75,30 @@ server.post('/api/grades',(request,response)=>{
     )})
 })
 
-
+server.delete('/api/grades/:student_id',(request,response)=>{
+    if(request.params.student_id === undefined){
+        response.send({
+            success:false,
+            error:'must provide a student ID for delete'
+        })
+        return;
+    }
+    db.connect(()=>{
+        const query = 'DELETE FROM `grades` WHERE `id`='+request.params.student_id;
+        db.query(query,(error,results)=>{
+            if (!error){
+                response.send({
+                    success:true
+                })
+            } else {
+                response.send({
+                    success:false,
+                    error
+                })
+            }
+        })
+    })
+})
 
 
 //listen is a method in server that requires 2 parameters, the port and a callback function
