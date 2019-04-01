@@ -68,13 +68,10 @@ class SGT_template{
 		this.displayAllStudents();
 	}
 	getDataFromServer(response){
-		// if (response.success === false){
-		// 	console.log('errors '+response.errors)
-		// }
 		var ajaxOptions = {
 			dataType:'json',
-			url:"http://s-apis.learningfuze.com/sgt/get",
-			method:'post',
+			url:"api/grades",
+			method:'get',
 			data: {
 				api_key:"ytxb41Nxmb"
 			},
@@ -83,6 +80,7 @@ class SGT_template{
 		$.ajax(ajaxOptions);
 	}
 	handleData(response){
+		debugger;
 		if (response.hint){
 			console.log(response);
 		}
@@ -176,7 +174,7 @@ class SGT_template{
 	sendDataToServer(name,course,grade){
 		var ajaxOptions={
 			dataType:'json',
-			url:"http://s-apis.learningfuze.com/sgt/create",
+			url:"/api/grades",
 			method:'post',
 			data: {
 				api_key:"ytxb41Nxmb",
@@ -191,12 +189,8 @@ class SGT_template{
 	deleteData(id){
 		var ajaxOptions={
 			dataType:'json',
-			url:"http://s-apis.learningfuze.com/sgt/delete",
-			method:'post',
-			data: {
-				api_key:"ytxb41Nxmb",
-				student_id:id
-			},
+			url:"/api/grades?student_id="+id,
+			method:'delete',
 			success: this.didDataDelete
 		}
 		$.ajax(ajaxOptions);

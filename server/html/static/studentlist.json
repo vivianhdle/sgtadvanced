@@ -1,0 +1,24 @@
+{
+	"success": true,
+	"data": [{
+		"id": 1,
+		"name": "Vivian Le",
+		"course": "Linear Algebra",
+		"grade": 80
+	}, {
+		"id": 2,
+		"name": "Spongebob Squarepants",
+		"course": "Pineapple",
+		"grade": 100
+	}, {
+		"id": 3,
+		"name": "Squidward Null",
+		"course": "Squidwardian History",
+		"grade": 30
+	}, {
+		"id": 4,
+		"name": "Mr Krabs",
+		"course": "Money",
+		"grade": 60
+	}]
+}

@@ -101,6 +101,7 @@ class Student{
 		})
 		this.domElements.operations = $('<td>')
 		this.domElements.deleteButton = $('<button>',{
+			class:'btn-danger btn',
 			text:'delete',
 			click:this.handleDelete
 		})
